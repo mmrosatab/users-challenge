@@ -1,19 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { ChangeEvent, useEffect, useState } from 'react'
+import { useDebounce } from 'use-debounce'
 import { fetchUsers, User } from '@/services'
 import { UserCard } from '@/components/UserCard'
-import { Status, StatusIndicator } from '@/components/StatusIndicator'
+
 
 export default function Users() {
 
   const [users, setUsers] = useState<User[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(false)
+  const [query, setQuery] = useState('')
+  const [queryValue] = useDebounce(query, 1000)
 
   async function loadUsers() {
-
     try {
       const usersData = await fetchUsers()
       if (usersData?.length > 0) {
@@ -22,65 +21,58 @@ export default function Users() {
       }
     } catch (error) {
       console.log(error)
-      setError(true)
-    } finally {
-      setLoading(false)
+      throw new Error('Erro ao carregar usuários!')
     }
   }
 
+  function handleDelete(id: string) {
+    const newUsers = users.filter((user) => user.id !== id)
+    localStorage.setItem('users', JSON.stringify(newUsers))
+    setUsers(newUsers)
+  }
+
+  function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
+    setQuery(event.target.value)
+  }
+
+  function handleFilter() {
+    if (queryValue.length > 0) {
+      return users.filter((user) => user.name.toLowerCase().includes(queryValue.toLowerCase()))
+    }
+    return users
+  }
 
   useEffect(() => {
-
     const storedUsers = localStorage.getItem('users')
     if (storedUsers) {
       setUsers(JSON.parse(storedUsers))
-      setLoading(false)
     } else {
       loadUsers()
     }
-
   }, [])
 
 
-  if (loading) {
-    return (
-      <StatusIndicator
-        label='Carregando usuários...'
-        status={Status.Loading}
-      />
-    )
-
-  }
-
-  if (error) {
-    return (
-      <StatusIndicator
-        label='Erro ao buscar usuários! Tente novamente mais tarde!'
-        status={Status.Error}
-      />
-    )
-  }
-
-  if (!loading && !error && users?.length === 0) {
-    return (
-      <StatusIndicator
-        label='Nenhum usuário encontrado.'
-        status={Status.Empty}
-      />
-    )
-  }
+  const filteredUsers = handleFilter()
 
   return (
-    <div className='flex flex-col items-center'>
-      <div className='mt-2'>filter</div>
-      <div className="mt-2">
-        {
-          users.map((user, key) => (
-            <Link href={`/users/${user.id}`} key={key}>
-              <UserCard key={key} {...user} />
-            </Link>
-          ))
-        }
+    <div className="h-screen w-screen overflow-x-hidden flex flex-col items-center bg-violet-300 pt-4 pb-4">
+      <div className="pt-1 pb-2 flex items-center">
+        <input
+          type="text"
+          value={query}
+          onChange={handleOnChange}
+          placeholder="Filtrar por nome"
+          className="focus:outline-none"
+        />
+      </div>
+      <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
+        {filteredUsers.map((user) => (
+          <UserCard
+            key={user.id}
+            user={user}
+            onDelete={() => handleDelete(user.id)}
+          />
+        ))}
       </div>
     </div>
   )

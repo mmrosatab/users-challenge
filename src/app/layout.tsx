@@ -14,10 +14,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html>
+    <html lang='en' className='h-screen w-screen'>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <body
+        className='h-screen w-screen overflow-x-hidden'
       >
-        <Theme accentColor="violet">
+        <Theme
+          accentColor="violet"
+          hasBackground={false}
+        >
           {children}
         </Theme>
       </body>

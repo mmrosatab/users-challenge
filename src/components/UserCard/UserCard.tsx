@@ -1,52 +1,52 @@
-import { Avatar, Box, Card, Flex, IconButton, Text } from '@radix-ui/themes'
+import { Card, IconButton } from '@radix-ui/themes'
+import Image from 'next/image'
 import { TrashIcon } from '@radix-ui/react-icons'
+import Link from 'next/link'
 import { User } from '@/services'
 
-export function UserCard(user: User) {
+interface UserCardProps {
+    user: User
+    onDelete: () => void
+}
+
+export function UserCard({ user, onDelete }: UserCardProps) {
 
     const {
-        imageUrl,
+        id,
+        imageUrl = '/images/user.svg',
         name,
         username,
         email,
         phone,
+        website
     } = user
 
     return (
-        <Box width="600px" mb='10px'>
-            <Card>
-                <Flex align="center" justify="between">
-                    <Avatar
-                        size="4"
-                        src={imageUrl}
-                        radius="full"
-                        fallback={name[0]}
-                    />
-                    <Box width="180px">
-                        <Text as="div" size="2" weight="bold">
-                            {name}
-                        </Text>
-                        <Text as="div" size="2" color="gray">
-                            {username}
-                        </Text>
-                    </Box>
-
-                    <Box width="220px">
-                        <Text as="div" size="2" weight="bold">
-                            {email}
-                        </Text>
-                        <Text as="div" size="2" color="gray">
-                            {phone}
-                        </Text>
-                    </Box>
-                    <Box>
-                        <IconButton>
-                            <TrashIcon width="18" height="18" />
-                        </IconButton>
-                    </Box>
-                </Flex>
-            </Card>
-        </Box>
-
+        <Card className='w-[300px] rounded-xl'>
+            <div className="w-full h-36 flex items-end justify-center bg-violet-200">
+                <Image
+                    className=""
+                    src={imageUrl}
+                    width={140}
+                    height={40}
+                    alt="Picture of the user"
+                />
+            </div>
+            <div className=" w-full p-1" >
+                <div className="p-1">{name}</div>
+                <div className="p-1">{username}</div>
+                <div className="p-1">{email}</div>
+                <div className="p-1">{phone}</div>
+                <div className="p-1">{website}</div>
+            </div>
+            <div className="bg-violet-200 w-full p-1 flex items-center justify-between" >
+                <div className="p-1"><Link href={`/users/${id}`} >See details</Link></div>
+                <div className="p-1 w-12flex items-center justify-center">
+                    <IconButton onClick={onDelete}>
+                        <TrashIcon width="18" height="18" />
+                    </IconButton>
+                </div>
+            </div>
+        </Card>
     )
 }

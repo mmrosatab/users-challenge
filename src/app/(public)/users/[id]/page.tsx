@@ -1,12 +1,31 @@
-export default function UsersDetails() {
-    return (
-        <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-            <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-                users
-            </main>
-            <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+import { notFound } from 'next/navigation'
+import { fetchUsersDetails } from '@/services'
 
-            </footer>
-        </div>
-    )
+interface UserDetailsParams {
+    params: Promise<{ id: string }>
+}
+
+export default async function UserDetails({ params }: UserDetailsParams) {
+
+    const { id } = await params
+
+    try {
+        const user = await fetchUsersDetails(id)
+
+        if (!user || !user.id) {
+            return notFound()
+        }
+
+        return (
+            <div>
+                <h1>Detalhes do Usuário</h1>
+                <p>Nome: {user.name}</p>
+                <p>Email: {user.email}</p>
+                <p>Telefone: {user.phone}</p>
+            </div>
+        )
+    } catch (error) {
+        console.log(error)
+        return notFound()
+    }
 }

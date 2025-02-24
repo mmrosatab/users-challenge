@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export interface User {
-    id: number
+    id: string
     name: string
     username: string
     email: string
@@ -27,5 +27,10 @@ export interface User {
 
 export async function fetchUsers(): Promise<User[]> {
     const { data } = await axios.get('http://jsonplaceholder.typicode.com/users')
+    return data
+}
+
+export async function fetchUsersDetails(id: string): Promise<User> {
+    const { data } = await axios.get(`http://jsonplaceholder.typicode.com/users/${id}`)
     return data
 }
