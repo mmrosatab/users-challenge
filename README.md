@@ -1,8 +1,8 @@
-NextJS application to show informations about users
+NextJS application to show informations about users.
 
 ## Getting Started
 
-First, run the development server:
+How run application?
 
 yarn dev
 

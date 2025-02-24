@@ -33,14 +33,30 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                 />
             </div>
             <div className=" w-full p-1" >
-                <div className="p-1">{name}</div>
-                <div className="p-1">{username}</div>
-                <div className="p-1">{email}</div>
-                <div className="p-1">{phone}</div>
-                <div className="p-1">{website}</div>
+                <div className="p-1 flex justify-start">
+                    <div className="font-bold">Name:</div>
+                    <div className="pl-1 truncate">{name}</div>
+                </div>
+                <div className="p-1 flex justify-start">
+                    <div className="font-bold">Username:</div>
+                    <div className="pl-1 truncate">{username}</div>
+                </div>
+                <div className="p-1 flex justify-start">
+                    <div className="font-bold">E-mail:</div>
+                    <div className="pl-1 truncate">{email}</div>
+                </div>
+                <div className="p-1 flex justify-start">
+                    <div className="font-bold">Phone:</div>
+                    <div className="pl-1 truncate">{phone}</div>
+                </div>
+
+                <div className="p-1 flex justify-start">
+                    <div className="font-bold">Website:</div>
+                    <div className="pl-1 truncate">{website}</div>
+                </div>
             </div>
             <div className="bg-violet-200 w-full p-1 flex items-center justify-between" >
-                <div className="p-1"><Link href={`/users/${id}`} >See details</Link></div>
+                <div className="p-1 hover:text-violet-600"><Link href={`/users/${id}`} >See details</Link></div>
                 <div className="p-1 w-12flex items-center justify-center">
                     <IconButton onClick={onDelete}>
                         <TrashIcon width="18" height="18" />

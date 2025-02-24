@@ -5,7 +5,6 @@ import { useDebounce } from 'use-debounce'
 import { fetchUsers, User } from '@/services'
 import { UserCard } from '@/components/UserCard'
 
-
 export default function Users() {
 
   const [users, setUsers] = useState<User[]>([])
@@ -61,7 +60,7 @@ export default function Users() {
           type="text"
           value={query}
           onChange={handleOnChange}
-          placeholder="Filtrar por nome"
+          placeholder="Filter by name"
           className="focus:outline-none"
         />
       </div>
