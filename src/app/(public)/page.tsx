@@ -43,8 +43,10 @@ export default function Users() {
 
   useEffect(() => {
     const storedUsers = localStorage.getItem('users')
-    if (storedUsers) {
-      setUsers(JSON.parse(storedUsers))
+    const parsedUsers = storedUsers ? JSON.parse(storedUsers) : []
+
+    if (parsedUsers.length > 0) {
+      setUsers(parsedUsers)
     } else {
       loadUsers()
     }
