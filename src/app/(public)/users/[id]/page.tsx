@@ -35,7 +35,7 @@ export default async function UserDetails({ params }: UserDetailsParams) {
         const { name: companyName, } = company
 
         return (
-            <div className='w-screen h-screen flex flex-col items-center bg-violet-300 p-4'>
+            <div className='w-screen h-screen flex flex-col items-center bg-violet-100 p-4'>
                 <Card className='w-full sm:w-[500px] rounded-xl'>
                     <div className="flex flex-col w-full justify-around sm:flex-row">
                         <div className="w-full sm:w-[300px] h-54 flex items-end justify-center bg-violet-200">

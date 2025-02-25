@@ -2,6 +2,9 @@
 
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useDebounce } from 'use-debounce'
+import { Button } from '@radix-ui/themes'
+import { PlusCircledIcon } from '@radix-ui/react-icons'
+import Link from 'next/link'
 import { fetchUsers, User } from '@/services'
 import { UserCard } from '@/components/UserCard'
 
@@ -56,16 +59,23 @@ export default function Users() {
   const filteredUsers = handleFilter()
 
   return (
-    <div className="h-screen w-screen overflow-x-hidden flex flex-col items-center bg-violet-300 pt-4 pb-4">
-      <div className="pt-1 pb-2 flex items-center">
-        <input
-          type="text"
-          value={query}
-          onChange={handleOnChange}
-          placeholder="Filter by name"
-          className="focus:outline-none"
-        />
+    <div className="h-screen w-screen overflow-x-hidden flex flex-col items-center bg-violet-100 pt-4 pb-4">
+      <div className="w-[302px] md:w-[608px] lg:w-[916px] mt-2 mb-2 flex items-center justify-between">
+        <div className="text-2xl font-bold text-violet-800">Users</div>
+        <Link href={'/register'}>
+          <Button className='mb-2'>
+            New User
+            <PlusCircledIcon />
+          </Button>
+        </Link>
       </div>
+      <input
+        type="text"
+        value={query}
+        onChange={handleOnChange}
+        placeholder="Filter by name"
+        className="w-[302px] md:w-[608px] lg:w-[914px] p-2 mt-1 mb-2 focus:outline-none font-light italic rounded-lg border border-gray-300"
+      />
       <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
         {filteredUsers.map((user) => (
           <UserCard
@@ -75,6 +85,7 @@ export default function Users() {
           />
         ))}
       </div>
+
     </div>
   )
 }

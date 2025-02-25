@@ -56,7 +56,7 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                 </div>
             </div>
             <div className="bg-violet-200 w-full p-1 flex items-center justify-between" >
-                <div className="p-1 hover:text-violet-600"><Link href={`/users/${id}`} >See details</Link></div>
+                <div className="p-1 hover:text-violet-800"><Link href={`/users/${id}`} >See details</Link></div>
                 <div className="p-1 w-12flex items-center justify-center">
                     <IconButton onClick={onDelete}>
                         <TrashIcon width="18" height="18" />
