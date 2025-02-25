@@ -30,6 +30,7 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                     width={140}
                     height={40}
                     alt="Picture of the user"
+                    priority={true}
                 />
             </div>
             <div className=" w-full p-1" >

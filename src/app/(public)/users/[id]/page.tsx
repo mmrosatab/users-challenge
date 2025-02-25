@@ -45,6 +45,7 @@ export default async function UserDetails({ params }: UserDetailsParams) {
                                 width={140}
                                 height={40}
                                 alt="Picture of the user"
+                                priority={true}
                             />
                         </div>
                         <div className="w-full pt-2 sm:pl-4 sm:pt-0" >
