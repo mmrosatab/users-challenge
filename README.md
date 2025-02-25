@@ -1,4 +1,4 @@
-NextJS application to show informations about users. This application use {JSON} Placeholder
+NextJS application to show informations about users proposed by Cibra company. This application use {JSON} Placeholder
 Free fake and reliable API just for load initial data. The data are cached on local storage.
 
 ## How run application?
