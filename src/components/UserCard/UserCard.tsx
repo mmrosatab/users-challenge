@@ -1,7 +1,7 @@
-import { Card, IconButton } from '@radix-ui/themes'
-import Image from 'next/image'
-import { TrashIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
+import Image from 'next/image'
+import { Card } from '@radix-ui/themes'
+import { ModalDeleteUser } from './ModalDeleteUser'
 import { User } from '@/services'
 
 interface UserCardProps {
@@ -23,7 +23,7 @@ export function UserCard({ user, onDelete }: UserCardProps) {
 
     return (
         <Card className='w-[300px] rounded-xl'>
-            <div className="w-full h-36 flex items-end justify-center bg-violet-200">
+            <div className="w-full h-36 flex items-end justify-center bg-violet-100">
                 <Image
                     className=""
                     src={imageUrl}
@@ -56,12 +56,12 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                     <div className="pl-1 truncate">{website}</div>
                 </div>
             </div>
-            <div className="bg-violet-200 w-full p-1 flex items-center justify-between" >
-                <div className="p-1 hover:text-violet-800"><Link href={`/users/${id}`} >See details</Link></div>
+            <div className="bg-violet-100 w-full p-1 flex items-center justify-between" >
+                <div className="p-1 hover:text-violet-800">
+                    <Link href={`/users/${id}`}>See details</Link>
+                </div>
                 <div className="p-1 w-12flex items-center justify-center">
-                    <IconButton onClick={onDelete}>
-                        <TrashIcon width="18" height="18" />
-                    </IconButton>
+                    <ModalDeleteUser onDelete={onDelete} label={name} />
                 </div>
             </div>
         </Card>
