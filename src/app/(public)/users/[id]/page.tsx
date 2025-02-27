@@ -3,10 +3,9 @@
 import { useEffect, useState } from 'react'
 import { notFound, useParams } from 'next/navigation'
 import Image from 'next/image'
-import { Button, Card, Spinner } from '@radix-ui/themes'
 import Link from 'next/link'
+import { Button, Card, Spinner } from '@radix-ui/themes'
 import { User } from '@/services'
-
 
 export default function UserDetails() {
 
