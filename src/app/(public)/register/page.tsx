@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
@@ -21,6 +22,8 @@ interface UserFormData {
 }
 
 export default function Register() {
+
+    const router = useRouter()
 
     const {
         register,
@@ -64,6 +67,7 @@ export default function Register() {
 
                 parsedUsers.push(newUser)
                 localStorage.setItem('users', JSON.stringify(parsedUsers))
+                router.replace('/')
             }
 
             reader.onerror = (error) => {
@@ -75,7 +79,8 @@ export default function Register() {
     }
 
     return (
-        <div className="h-screen w-screen flex items-center justify-center bg-violet-100 p-4">
+        <div className="h-screen w-screen flex flex-col items-center justify-center bg-violet-100 p-4">
+            <header className="pb-4 text-2xl text-violet-800 font-bold">Register</header>
             <main className="bg-white opacity-80 border border-gray-300 p-6 rounded-lg w-full max-w-md">
                 <Form.Root onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Name */}
