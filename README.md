@@ -18,3 +18,10 @@ https://users-challenge-henna.vercel.app/
 ## Screens
 
 [recording.webm](https://github.com/user-attachments/assets/27940513-00ab-4159-8eb7-0fe34533edfa)
+
+
+![alt text](/public/users.png)
+
+![alt text](/public/details.png)
+
+![alt text](/public/register.png)
