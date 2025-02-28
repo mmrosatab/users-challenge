@@ -6,7 +6,9 @@ import { useRouter } from 'next/navigation'
 import { Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
+import { useState } from 'react'
 import { User } from '@/services'
+import { Dialog } from '@/components/Dialog'
 
 interface UserFormData {
     name: string
@@ -21,9 +23,17 @@ interface UserFormData {
     companyName: string
 }
 
+
+interface StatusRegister {
+    message: string
+    action?: () => void
+}
+
 export default function Register() {
 
     const router = useRouter()
+    const [openDialog, setOpenDialog] = useState(false)
+    const [statusRegister, setStatusRegister] = useState<StatusRegister>({ message: '' })
 
     const {
         register,
@@ -31,52 +41,81 @@ export default function Register() {
         formState: { errors }
     } = useForm<UserFormData>()
 
+    const buildUser = (data: UserFormData, imageUrl?: string): User => ({
+        id: uuidv4(),
+        name: data.name,
+        username: data.username,
+        email: data.email,
+        phone: data.phone,
+        website: data.website,
+        imageUrl,
+        address: {
+            city: data.city,
+            geo: { lat: '', lng: '' },
+            street: data.street,
+            suite: '',
+            zipcode: data.zipcode
+        },
+        company: {
+            bs: '',
+            catchPhrase: '',
+            name: data.companyName
+        }
+    })
+
+    const handleSuccess = () => {
+        setStatusRegister({
+            message: 'User registered successfully',
+            action: () => router.replace('/')
+        })
+        setOpenDialog(true)
+    }
+
+    const handleError = (message: string | unknown) => {
+        console.log(message)
+        setStatusRegister({ message: 'Failed register user' })
+        setOpenDialog(true)
+    }
+
     const onSubmit = (data: UserFormData) => {
-        const storedUsers = localStorage.getItem('users')
-        const parsedUsers: User[] = storedUsers ? JSON.parse(storedUsers) : []
+        try {
+            const storedUsers = localStorage.getItem('users')
+            const parsedUsers: User[] = storedUsers ? JSON.parse(storedUsers) : []
 
-        const file = data.imageUrl?.[0]
+            const file = data.imageUrl?.item(0)
+            if (file) {
+                const reader = new FileReader()
+                reader.readAsDataURL(file)
 
-        if (file) {
-            const reader = new FileReader()
-            reader.readAsDataURL(file)
-            reader.onload = () => {
-                const base64Image = reader.result as string
-
-                const newUser: User = {
-                    id: uuidv4(),
-                    name: data.name,
-                    username: data.username,
-                    email: data.email,
-                    phone: data.phone,
-                    website: data.website,
-                    imageUrl: base64Image,
-                    address: {
-                        city: data.city,
-                        geo: { lat: '', lng: '' },
-                        street: data.street,
-                        suite: '',
-                        zipcode: data.zipcode
-                    },
-                    company: {
-                        bs: '',
-                        catchPhrase: '',
-                        name: data.companyName
+                reader.onload = () => {
+                    try {
+                        const newUser = buildUser(data, reader.result as string)
+                        parsedUsers.push(newUser)
+                        localStorage.setItem('users', JSON.stringify(parsedUsers))
+                        handleSuccess()
+                    } catch (error) {
+                        console.error('Erro ao salvar usuário com imagem:', error)
+                        handleError(error)
                     }
                 }
 
+                reader.onerror = (error) => {
+                    handleError(error)
+                }
+
+            } else {
+                const newUser = buildUser(data)
                 parsedUsers.push(newUser)
                 localStorage.setItem('users', JSON.stringify(parsedUsers))
-                router.replace('/')
+                handleSuccess()
             }
 
-            reader.onerror = (error) => {
-                console.error('Erro image:', error)
-            }
-        } else {
-            console.warn('No image selected.')
+        } catch (error) {
+            handleError(error)
         }
     }
+
+
 
     return (
         <div className="h-screen w-screen flex flex-col items-center justify-center bg-violet-100 p-4">
@@ -229,7 +268,6 @@ export default function Register() {
                     <Form.Field name="image">
                         <div className="flex justify-between">
                             <Form.Label>Image</Form.Label>
-                            {errors.imageUrl && <Form.Message className="text-red-500">{errors.imageUrl.message}</Form.Message>}
                         </div>
                         <Form.Control asChild>
                             <input
@@ -249,6 +287,20 @@ export default function Register() {
                         <Button type="submit">Register</Button>
                     </div>
                 </Form.Root>
+
+                <Dialog
+                    onClickActionButton={statusRegister.action}
+                    contentNode={
+                        <>
+                            <label className="">{statusRegister.message}</label>
+                        </>
+
+                    }
+                    open={openDialog}
+                    setOpen={setOpenDialog}
+                    title='Register user'
+                    actionButtonLabel='Ok'
+                />
             </main>
         </div>
     )

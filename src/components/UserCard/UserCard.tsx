@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Card } from '@radix-ui/themes'
-import { DeleteAlertDialog } from './DeleteAlertDialog'
+import { Card, IconButton } from '@radix-ui/themes'
+import { TrashIcon } from '@radix-ui/react-icons'
+import { useState } from 'react'
+import { Dialog } from '@/components/Dialog'
 import { User } from '@/services'
 
 interface UserCardProps {
@@ -10,6 +12,8 @@ interface UserCardProps {
 }
 
 export function UserCard({ user, onDelete }: UserCardProps) {
+
+    const [openDialog, setOpenDialog] = useState(false)
 
     const {
         id,
@@ -61,7 +65,23 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                     <Link href={`/users/${id}`}>See details</Link>
                 </div>
                 <div className="p-1 w-12flex items-center justify-center">
-                    <DeleteAlertDialog onDelete={onDelete} label={name} />
+                    <IconButton onClick={() => setOpenDialog(true)}>
+                        <TrashIcon width="18" height="18" />
+                    </IconButton>
+                    <Dialog
+                        onClickActionButton={onDelete}
+                        contentNode={
+                            <>
+                                <label className="">Click confirm to delete user</label>
+                                <label className="font-bold pl-1">{name}</label>
+                            </>
+
+                        }
+                        open={openDialog}
+                        setOpen={setOpenDialog}
+                        title='Delete User'
+                        actionButtonLabel='Confirm'
+                    />
                 </div>
             </div>
         </Card>
