@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card } from '@radix-ui/themes'
-import { ModalDeleteUser } from './ModalDeleteUser'
+import { DeleteAlertDialog } from './DeleteAlertDialog'
 import { User } from '@/services'
 
 interface UserCardProps {
@@ -61,7 +61,7 @@ export function UserCard({ user, onDelete }: UserCardProps) {
                     <Link href={`/users/${id}`}>See details</Link>
                 </div>
                 <div className="p-1 w-12flex items-center justify-center">
-                    <ModalDeleteUser onDelete={onDelete} label={name} />
+                    <DeleteAlertDialog onDelete={onDelete} label={name} />
                 </div>
             </div>
         </Card>
