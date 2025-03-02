@@ -29,8 +29,3 @@ export async function fetchUsers(): Promise<User[]> {
     const { data } = await axios.get('https://jsonplaceholder.typicode.com/users')
     return data
 }
-
-export async function fetchUsersDetails(id: string): Promise<User> {
-    const { data } = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-    return data
-}
