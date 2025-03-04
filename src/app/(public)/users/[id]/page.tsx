@@ -22,7 +22,7 @@ export default function UserDetails() {
                 return notFound()
             }
 
-            const user = parsedUsers.find((item: User) => Number(item.id) == Number(id))
+            const user = parsedUsers.find((item: User) => String(item.id) == String(id))
 
             if (!user || !user.id) {
                 return notFound()
