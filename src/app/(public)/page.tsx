@@ -1,13 +1,16 @@
 'use client'
 
 import { ChangeEvent, useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useDebounce } from 'use-debounce'
 import { Button, Spinner } from '@radix-ui/themes'
 import { PlusCircledIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
+import { IconButton } from '@radix-ui/themes'
+import { TrashIcon } from '@radix-ui/react-icons'
 import { EmptyState } from './EmptyState'
-import { fetchUsers, User } from '@/services'
+import { Dialog } from '@/components/Dialog'
 import { UserCard } from '@/components/UserCard'
+import { fetchUsers, User } from '@/services'
 
 export default function Users() {
 
@@ -15,6 +18,7 @@ export default function Users() {
   const [query, setQuery] = useState('')
   const [queryValue] = useDebounce(query, 1000)
   const [loading, setLoading] = useState(true)
+  const [openDialog, setOpenDialog] = useState(false)
 
   async function loadUsers() {
     try {
@@ -109,7 +113,27 @@ export default function Users() {
               <UserCard
                 key={user.id}
                 user={user}
-                onDelete={() => handleDelete(user?.id)}
+                actionsNode={(
+                  <>
+                    <IconButton data-testid="usercard-delete-btn" onClick={() => setOpenDialog(true)}>
+                      <TrashIcon width="18" height="18" />
+                    </IconButton>
+                    <Dialog
+                      onClickActionButton={() => handleDelete(user.id)}
+                      contentNode={
+                        <>
+                          <label className="">Click confirm to delete user</label>
+                          <label className="font-bold pl-1">{user.name}</label>
+                        </>
+
+                      }
+                      open={openDialog}
+                      setOpen={setOpenDialog}
+                      title='Delete User'
+                      actionButtonLabel='Confirm'
+                    />
+                  </>
+                )}
               />
             ))}
           </div>
