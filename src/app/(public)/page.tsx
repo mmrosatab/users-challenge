@@ -1,77 +1,36 @@
 'use client'
 
-import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent } from 'react'
 import Link from 'next/link'
-import { useDebounce } from 'use-debounce'
 import { AlertDialog, Button, Spinner, IconButton } from '@radix-ui/themes'
 import { PlusCircledIcon, TrashIcon } from '@radix-ui/react-icons'
 import { EmptyState } from './EmptyState'
 import { Dialog, UserCard } from '@/components'
-import { fetchUsers, User } from '@/services'
+import { User } from '@/services'
+import { useUsers } from '@/hooks'
 
 export default function Users() {
 
-  const [users, setUsers] = useState<User[]>([])
-  const [query, setQuery] = useState('')
-  const [queryValue] = useDebounce(query, 1000)
-  const [loading, setLoading] = useState(true)
-  const [openDialog, setOpenDialog] = useState(false)
-  const [userToDelete, setUserToDelete] = useState<User | null>(null)
-
-  const loadUsers = useCallback(async () => {
-    try {
-      const usersData = await fetchUsers()
-      if (usersData?.length > 0) {
-        localStorage.setItem('users', JSON.stringify(usersData))
-        setUsers(usersData)
-      }
-    } catch (error) {
-      console.log(error)
-      throw new Error('Erro ao carregar usuários!')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const {
+    users,
+    query,
+    setQuery,
+    loading,
+    openDialog,
+    setOpenDialog,
+    userToDelete,
+    setUserToDelete,
+    deleteUser
+  } = useUsers()
 
   function handleClickDelete(user: User) {
     setUserToDelete(user)
     setOpenDialog(true)
   }
 
-  function deleteUser() {
-    if (!userToDelete) return
-
-    const { id } = userToDelete
-    const newUsers = users.filter((user) => user.id !== id)
-    localStorage.setItem('users', JSON.stringify(newUsers))
-    setUsers(newUsers)
-    setOpenDialog(false)
-    setUserToDelete(null)
-  }
-
   function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
     setQuery(event.target.value)
   }
-
-  const filteredUsers = useMemo(() => {
-    if (queryValue.length > 0) {
-      return users.filter((user) => user.name.toLowerCase().includes(queryValue.toLowerCase()))
-    }
-    return users
-  }, [queryValue, users])
-
-  useEffect(() => {
-    const storedUsers = localStorage.getItem('users')
-    const parsedUsers = storedUsers ? JSON.parse(storedUsers) : []
-
-    if (parsedUsers.length > 0) {
-      setUsers(parsedUsers)
-      setLoading(false)
-    } else {
-      loadUsers()
-    }
-  }, [])
-
 
   if (loading) {
     return (
@@ -83,7 +42,6 @@ export default function Users() {
       </div>
     )
   }
-
 
   if (users?.length === 0) {
     return (
@@ -113,9 +71,9 @@ export default function Users() {
       />
 
       {
-        filteredUsers.length > 0 ? (
+        users.length > 0 ? (
           <div className='grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3'>
-            {filteredUsers.map((user) => (
+            {users.map((user: User) => (
               <UserCard
                 key={user.id}
                 user={user}
