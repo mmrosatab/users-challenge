@@ -38,7 +38,7 @@ export function useUsers() {
     }
 
     const filteredUsers = useMemo(() => {
-        if (queryValue.length > 0) {
+        if (queryValue.length > 0 && users.length > 0) {
             return users.filter((user) => user.name.toLowerCase().includes(queryValue.toLowerCase()))
         }
         return users

@@ -43,14 +43,6 @@ export default function Users() {
     )
   }
 
-  if (users?.length === 0) {
-    return (
-      <div className="h-screen w-screen overflow-x-hidden flex flex-col items-center bg-violet-100 pt-4 pb-4">
-        <EmptyState />
-      </div>
-    )
-  }
-
   return (
     <div className="h-screen w-screen overflow-x-hidden flex flex-col items-center bg-violet-100 pt-4 pb-4">
       <div className="w-[302px] sm:w-[608px] md:w-[608px] lg:w-[916px] mt-2 mb-2 flex items-center justify-between">
