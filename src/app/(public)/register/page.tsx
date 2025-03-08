@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Button } from '@radix-ui/themes'
 import { useRouter } from 'next/navigation'
-import { Form } from 'radix-ui'
+import { AlertDialog, Form } from 'radix-ui'
 import { useForm } from 'react-hook-form'
 import { v4 as uuidv4 } from 'uuid'
 import { useState } from 'react'
@@ -289,17 +289,20 @@ export default function Register() {
                 </Form.Root>
 
                 <Dialog
-                    onClickActionButton={statusRegister.action}
                     contentNode={
                         <>
                             <label className="">{statusRegister.message}</label>
                         </>
 
                     }
+                    actionNode={
+                        <AlertDialog.Action asChild>
+                            <Button data-testid="ok-action-btn" className='hover:cursor-pointer hover:text-violet-800' onClick={statusRegister.action}>OK</Button>
+                        </AlertDialog.Action>
+                    }
                     open={openDialog}
                     setOpen={setOpenDialog}
                     title='Register user'
-                    actionButtonLabel='Ok'
                 />
             </main>
         </div>
